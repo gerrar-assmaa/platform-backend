@@ -1,5 +1,4 @@
 from django.db import models
-#from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import RegexValidator
 
 # Create your models here.
@@ -16,8 +15,7 @@ class Rapport(models.Model):
     encadrant =models.CharField(max_length=200)
     email_encadrant = models.EmailField(max_length = 254)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")
-    #téléphone_encadrant = PhoneNumberField(unique = True, null = False, blank = False)
     téléphone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16)
     lien_rapport = models.URLField(max_length = 200)
     rapport_confidentiel = models.BooleanField(default=True)
-#    fk_code_apogée
+#   fk_code_apogée

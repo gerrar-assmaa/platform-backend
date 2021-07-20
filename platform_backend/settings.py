@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'main_app.apps.MainAppConfig',
     # CORS
     'corsheaders',
-    #phone number validator library
-    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
