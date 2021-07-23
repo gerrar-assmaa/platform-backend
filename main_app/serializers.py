@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from main_app.models import Rapport
+from main_app.models import Rapport, MotCle
 
 class RapportSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,3 +19,9 @@ class RapportSerializer(serializers.ModelSerializer):
                 'téléphone_encadrant' ,
                 'lien_rapport' ,
                 'rapport_confidentiel' )
+
+class MotCleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MotCle
+        fields = ('id',
+                'mot' )                

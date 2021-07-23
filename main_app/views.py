@@ -1,15 +1,21 @@
 from rest_framework import generics
 
-#for Rapport
-from main_app.models import Rapport
-from main_app.serializers import RapportSerializer
+#necessary imports (models & serializers)
+from main_app.models import Rapport, MotCle
+from main_app.serializers import RapportSerializer, MotCleSerializer
 
-
-class TutorialList(generics.ListCreateAPIView):
+#rapport
+class RapportList(generics.ListCreateAPIView):
+    queryset = Rapport.objects.all()
+    serializer_class = RapportSerializer
+class RapportDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rapport.objects.all()
     serializer_class = RapportSerializer
 
-
-class TutorialDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Rapport.objects.all()
-    serializer_class = RapportSerializer
+#motcle
+class MotCleList(generics.ListCreateAPIView):
+    queryset = MotCle.objects.all()
+    serializer_class = MotCleSerializer
+class MotCleDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MotCle.objects.all()
+    serializer_class = MotCleSerializer    

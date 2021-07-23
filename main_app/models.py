@@ -19,3 +19,8 @@ class Rapport(models.Model):
     lien_rapport = models.URLField(max_length = 200)
     rapport_confidentiel = models.BooleanField(default=True)
 #   fk_code_apogée
+
+#many to many relationship with rapport
+class MotCle(models.Model):
+    mot = models.CharField(max_length=200,blank=False, default='')
+    rapports = models.ManyToManyField(Rapport)
