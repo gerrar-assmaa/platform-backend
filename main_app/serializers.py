@@ -1,27 +1,38 @@
 from rest_framework import serializers 
-from main_app.models import Rapport, MotCle
+from main_app.models import Utilisateur, Professeur, Etudiant, Insertion, Rapport, MotCle
+
+class UtilisateurSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Utilisateur
+        fields = "__all__"
+
+class ProfesseurSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Professeur
+        fields = "__all__"  
+
+class EtudiantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Etudiant
+        fields = "__all__"    
+
+class InsertionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Insertion
+        fields = "__all__"                               
 
 class RapportSerializer(serializers.ModelSerializer):
+    #Etudiant = serializers.IntegerField(source = 'Etudiant.id')
+    
     class Meta:
         model = Rapport
-        fields = ('id',
-                'stage_ou_projet' ,
-                'date_debut_stage' ,
-                'date_fin_stage' ,
-                'intitulé_stage' ,
-                'société_stage' ,
-                'secteur_société' ,
-                'ville_société' ,
-                'pays_société' ,
-                'détails_add_société' ,
-                'encadrant' ,
-                'email_encadrant' ,
-                'téléphone_encadrant' ,
-                'lien_rapport' ,
-                'rapport_confidentiel' )
+        fields = "__all__"
 
 class MotCleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MotCle
-        fields = ('id',
-                'mot' )                
+        fields = "__all__"
+
+          
+
+                               
