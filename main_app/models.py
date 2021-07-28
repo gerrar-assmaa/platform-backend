@@ -1,15 +1,14 @@
 #import re
-from django.core.exceptions import ObjectDoesNotExist
+#from django.core.exceptions import ObjectDoesNotExist
+#from django.contrib.auth.hashers import check_password
+
 from django.db import models
 from django.core.validators import RegexValidator
-
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.hashers import check_password
 
 #OneToOne => one to one relationship
 #foreignKey => one to many relationship
 #ManyToMany => many to many relationship
-
 
 class Utilisateur(models.Model):
     email = models.EmailField(max_length = 254)
@@ -24,10 +23,10 @@ class Utilisateur(models.Model):
 class Professeur(models.Model):
     prenom = models.CharField(max_length=200,blank=False, default='')
     nom = models.CharField(max_length=200,blank=False, default='')
-    email_perso = models.EmailField(max_length = 254)
+    email_perso = models.EmailField(max_length = 254, default=None, blank=True, null=True)
     email_pro = models.EmailField(max_length = 254)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")    
-    telephone = models.CharField(validators = [phoneNumberRegex], max_length = 16)
+    telephone = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     departement = models.CharField(max_length=200,blank=False, default='')
     #one to one relationship (with utilisateur)
     fk_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE)         
@@ -36,25 +35,25 @@ class Etudiant(models.Model):
     code_etudiant = models.IntegerField()
     prenom = models.CharField(max_length=200,blank=False, default='')
     nom = models.CharField(max_length=200,blank=False, default='')
-    email_perso = models.EmailField(max_length = 254)
+    email_perso = models.EmailField(max_length = 254, default=None, blank=True, null=True)
     email_pro = models.EmailField(max_length = 254)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")    
-    telephone = models.CharField(validators = [phoneNumberRegex], max_length = 16)
+    telephone = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     filiere = models.CharField(max_length=200,blank=False, default='')
     promotion = models.DateField()
     #one to one relationship (with utilisateur)
     fk_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE)    
 
 class Insertion(models.Model):
-    cursus_post_ensam = models.CharField(max_length=200,blank=False, default='')
-    univ = models.CharField(max_length=200,blank=False, default='')
-    pays_univ= models.CharField(max_length=200,blank=False, default='')
-    nature_formation = models.CharField(max_length=200,blank=False, default='')
-    intit_formation = models.CharField(max_length=200,blank=True, default='')
-    intit_poste = models.CharField(max_length=200,blank=True, default='')
-    societe = models.CharField(max_length=200,blank=False, default='')
-    ville_societe = models.CharField(max_length=200,blank=False, default='')
-    date_integration = models.DateField()
+    cursus_post_ensam = models.CharField(max_length=200, blank=False, default='')
+    univ = models.CharField(max_length=200, default=None, blank=True, null=True)
+    pays_univ= models.CharField(max_length=200, default=None, blank=True, null=True)
+    nature_formation = models.CharField(max_length=200, default=None, blank=True, null=True)
+    intit_formation = models.CharField(max_length=200, default=None, blank=True, null=True)
+    intit_poste = models.CharField(max_length=200, default=None, blank=True, null=True)
+    societe = models.CharField(max_length=200, default=None, blank=True, null=True)
+    ville_societe = models.CharField(max_length=200, default=None, blank=True, null=True)
+    date_integration = models.DateField(default=None, blank=True, null=True)
     #one to one relationship (with Etudiant)
     fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE)    
 
@@ -67,11 +66,11 @@ class Rapport(models.Model):
     secteur_societe =models.CharField(max_length=200,blank=False, default='')
     ville_societe =models.CharField(max_length=200,blank=False, default='')
     pays_societe =models.CharField(max_length=200,blank=False, default='')
-    details_add_societe =models.CharField(max_length=200,blank=True)
+    details_add_societe =models.CharField(max_length=200, default=None, blank=True, null=True)
     encadrant =models.CharField(max_length=200)
-    email_encadrant = models.EmailField(max_length = 254)
+    email_encadrant = models.EmailField(max_length = 254, default=None, blank=True, null=True)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")
-    telephone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16)
+    telephone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     lien_rapport = models.URLField(max_length = 200)
     rapport_confidentiel = models.BooleanField(default=True)
     #one to many relationship (with Etudiant)
