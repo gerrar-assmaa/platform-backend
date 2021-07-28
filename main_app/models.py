@@ -1,4 +1,4 @@
-import re
+#import re
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.core.validators import RegexValidator
@@ -30,7 +30,7 @@ class Professeur(models.Model):
     telephone = models.CharField(validators = [phoneNumberRegex], max_length = 16)
     departement = models.CharField(max_length=200,blank=False, default='')
     #one to one relationship (with utilisateur)
-    fk_id_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE,primary_key=True)         
+    fk_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE,primary_key=True)         
 
 class Etudiant(models.Model):
     code_etudiant = models.IntegerField()
@@ -43,7 +43,7 @@ class Etudiant(models.Model):
     filiere = models.CharField(max_length=200,blank=False, default='')
     promotion = models.DateField()
     #one to one relationship (with utilisateur)
-    fk_id_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE,primary_key=True)    
+    fk_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE,primary_key=True)    
 
 class Insertion(models.Model):
     cursus_post_ensam = models.CharField(max_length=200,blank=False, default='')
@@ -56,7 +56,7 @@ class Insertion(models.Model):
     ville_societe = models.CharField(max_length=200,blank=False, default='')
     date_integration = models.DateField()
     #one to one relationship (with Etudiant)
-    fk_code_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE,primary_key=True)    
+    fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE,primary_key=True)    
 
 class Rapport(models.Model):
     stage_ou_projet = models.BooleanField(default=True)
@@ -75,7 +75,7 @@ class Rapport(models.Model):
     lien_rapport = models.URLField(max_length = 200)
     rapport_confidentiel = models.BooleanField(default=True)
     #one to many relationship (with Etudiant)
-    fk_id_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
+    fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
 
 class MotCle(models.Model):
     mot = models.CharField(max_length=200,blank=False, default='')
