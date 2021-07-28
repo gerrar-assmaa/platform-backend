@@ -30,7 +30,7 @@ class Professeur(models.Model):
     telephone = models.CharField(validators = [phoneNumberRegex], max_length = 16)
     departement = models.CharField(max_length=200,blank=False, default='')
     #one to one relationship (with utilisateur)
-    fk_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE,primary_key=True)         
+    fk_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE)         
 
 class Etudiant(models.Model):
     code_etudiant = models.IntegerField()
@@ -43,7 +43,7 @@ class Etudiant(models.Model):
     filiere = models.CharField(max_length=200,blank=False, default='')
     promotion = models.DateField()
     #one to one relationship (with utilisateur)
-    fk_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE,primary_key=True)    
+    fk_user = models.OneToOneField(Utilisateur,on_delete=models.CASCADE)    
 
 class Insertion(models.Model):
     cursus_post_ensam = models.CharField(max_length=200,blank=False, default='')
@@ -56,7 +56,7 @@ class Insertion(models.Model):
     ville_societe = models.CharField(max_length=200,blank=False, default='')
     date_integration = models.DateField()
     #one to one relationship (with Etudiant)
-    fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE,primary_key=True)    
+    fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE)    
 
 class Rapport(models.Model):
     stage_ou_projet = models.BooleanField(default=True)
