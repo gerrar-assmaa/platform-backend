@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8081',
+    'http://localhost:4200',
 )
 
 ROOT_URLCONF = 'platform_backend.urls'
@@ -90,7 +90,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': '1.postgreAdmin.1',
         'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'PORT': '8081',
     }
 }
 
