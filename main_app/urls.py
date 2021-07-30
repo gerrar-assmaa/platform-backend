@@ -14,10 +14,11 @@ urlpatterns = [
     #etudiants
     path('etudiants/',views.EtudiantList.as_view()),
     path('etudiants/<int:pk>/',views.EtudiantDetail.as_view()),
-    #insertions
+    #insertions**
     path('insertions/',views.InsertionList.as_view()),
+    path('insertions',RedirectView.as_view(url='insertions/')),
     path('insertions/<int:pk>/',views.InsertionDetail.as_view()),
-    #rapports
+    #rapports**
     path('rapports/',views.RapportList.as_view()),
     path('rapports',RedirectView.as_view(url='rapports/')),
     path('rapports/<int:pk>',views.RapportDetail.as_view()),

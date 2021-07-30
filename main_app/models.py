@@ -46,13 +46,13 @@ class Etudiant(models.Model):
 
 class Insertion(models.Model):
     cursus_post_ensam = models.CharField(max_length=200, blank=False, default='')
-    univ = models.CharField(max_length=200, default=None, blank=True, null=True)
-    pays_univ= models.CharField(max_length=200, default=None, blank=True, null=True)
+    univ = models.CharField(max_length=200, default=None, blank=True, null=True)    
     nature_formation = models.CharField(max_length=200, default=None, blank=True, null=True)
     intit_formation = models.CharField(max_length=200, default=None, blank=True, null=True)
     intit_poste = models.CharField(max_length=200, default=None, blank=True, null=True)
     societe = models.CharField(max_length=200, default=None, blank=True, null=True)
-    ville_societe = models.CharField(max_length=200, default=None, blank=True, null=True)
+    ville = models.CharField(max_length=200,blank=False)
+    pays= models.CharField(max_length=200,blank=False)
     date_integration = models.DateField(default=None, blank=True, null=True)
     #one to one relationship (with Etudiant)
     fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE)    
