@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views 
+from django.views.generic.base import RedirectView
  
 
 urlpatterns = [ 
@@ -14,9 +15,11 @@ urlpatterns = [
     path('etudiants/',views.EtudiantList.as_view()),
     path('etudiants/<int:pk>/',views.EtudiantDetail.as_view()),
     #insertions
+    path('insertions',RedirectView.as_view(url='insertions/')),
     path('insertions/',views.InsertionList.as_view()),
     path('insertions/<int:pk>/',views.InsertionDetail.as_view()),
     #rapports
+    path('rapports',RedirectView.as_view(url='rapports/')),
     path('rapports/',views.RapportList.as_view()),
     path('rapports/<int:pk>/',views.RapportDetail.as_view()),
     #mot clés
