@@ -15,13 +15,15 @@ urlpatterns = [
     path('etudiants/',views.EtudiantList.as_view()),
     path('etudiants/<int:pk>/',views.EtudiantDetail.as_view()),
     #insertions
-    path('insertions',views.InsertionList.as_view()),
-    path('insertions/',views.InsertionList.as_view()),
+    path('insertions',views.InsertionListFiltered),
+    path('insertions/',views.InsertionListFiltered),
     path('insertions/<int:pk>',views.InsertionDetail.as_view()),
+    #url(r'^api/tutorials/(?P<pk>[0-9]+)$', views.tutorial_detail),
     #rapports
     path('rapports',RedirectView.as_view(url='rapports/')),
     path('rapports/',views.RapportList.as_view()),
     path('rapports/<int:pk>/',views.RapportDetail.as_view()),
+
     #mot clés
     path('motCles/',views.MotCleList.as_view()),
     path('motCles/<int:pk>/',views.MotCleDetail.as_view()),
