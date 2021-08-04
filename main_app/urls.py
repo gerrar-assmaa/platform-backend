@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views 
 from django.views.generic.base import RedirectView
@@ -22,7 +23,8 @@ urlpatterns = [
     #rapports
     path('rapports',RedirectView.as_view(url='rapports/')),
     path('rapports/',views.RapportList.as_view()),
-    path('rapports/<int:pk>/',views.RapportDetail.as_view()),
+    path('rapports',RedirectView.as_view(url='rapports/')),
+    path('rapports/<int:pk>',views.RapportDetail.as_view()),
 
     #mot clés
     path('motCles/',views.MotCleList.as_view()),
