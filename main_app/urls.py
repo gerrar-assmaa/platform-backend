@@ -21,11 +21,9 @@ urlpatterns = [
     path('insertions/<int:pk>',views.InsertionDetail.as_view()),
     #url(r'^api/tutorials/(?P<pk>[0-9]+)$', views.tutorial_detail),
     #rapports
-    path('rapports',RedirectView.as_view(url='rapports/')),
-    path('rapports/',views.RapportList.as_view()),
-    path('rapports',RedirectView.as_view(url='rapports/')),
     path('rapports/<int:pk>',views.RapportDetail.as_view()),
-
+    path('rapports',views.ReportListFiltered),
+    path('rapports/',views.ReportListFiltered),
     #mot clés
     path('motCles/',views.MotCleList.as_view()),
     path('motCles/<int:pk>/',views.MotCleDetail.as_view()),
