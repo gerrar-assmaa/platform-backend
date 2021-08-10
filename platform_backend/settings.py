@@ -41,7 +41,14 @@ INSTALLED_APPS = [
     'main_app.apps.MainAppConfig',
     # CORS
     'corsheaders',
+    'signIn_Up',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+     ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,10 +1,5 @@
 from rest_framework import serializers 
-from main_app.models import Utilisateur, Professeur, Etudiant, Insertion, Rapport, MotCle
-
-class UtilisateurSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Utilisateur
-        fields = "__all__"
+from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
 
 class ProfesseurSerializer(serializers.ModelSerializer):
     class Meta:

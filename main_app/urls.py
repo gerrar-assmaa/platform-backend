@@ -1,14 +1,10 @@
 from django.urls import path
-from django.views.generic.base import RedirectView
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views 
 from django.views.generic.base import RedirectView
  
 
 urlpatterns = [ 
-    #utilisateurs
-    path('utilisateurs/',views.UtilisateurList.as_view()),
-    path('utilisateurs/<int:pk>/',views.UtilisateurDetail.as_view()),
     #professeurs
     path('professeurs/',views.ProfesseurList.as_view()),
     path('professeurs/<int:pk>/',views.ProfesseurDetail.as_view()),
