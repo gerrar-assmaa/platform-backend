@@ -4,16 +4,9 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework import status
 #necessary imports (models & serializers)
-from main_app.models import Utilisateur, Professeur, Etudiant, Insertion, Rapport, MotCle
-from main_app.serializers import UtilisateurSerializer, ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer
-
-#utilisateur
-class UtilisateurList(generics.ListCreateAPIView):
-    queryset = Utilisateur.objects.all()
-    serializer_class = UtilisateurSerializer
-class UtilisateurDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Utilisateur.objects.all()
-    serializer_class = UtilisateurSerializer   
+from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
+from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer
+  
 
 #professeur
 class ProfesseurList(generics.ListCreateAPIView):
