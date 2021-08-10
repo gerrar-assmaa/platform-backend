@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'main_app.apps.MainAppConfig',
     # CORS
     'corsheaders',
+    'signIn_Up',
 ]
 
 REST_FRAMEWORK = {
