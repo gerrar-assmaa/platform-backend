@@ -1,5 +1,5 @@
 from django.http.response import JsonResponse
-from rest_framework.parsers import JSONParser 
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser 
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -28,7 +28,6 @@ class EtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
 class InsertionList(generics.ListCreateAPIView):
     queryset = Insertion.objects.all()
     serializer_class = InsertionSerializer
-
 class InsertionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Insertion.objects.all()
     serializer_class = InsertionSerializer
@@ -68,6 +67,7 @@ class RapportDetail(generics.RetrieveUpdateDestroyAPIView):
 
 @api_view(['GET', 'POST', 'DELETE'])
 def ReportListFiltered(request):
+    parser_classes = (MultiPartParser, FormParser)
     # GET list of reports, POST a new report, DELETE all reports
     if request.method == 'GET':
         reports = Rapport.objects.all()
@@ -80,7 +80,8 @@ def ReportListFiltered(request):
         return JsonResponse(reports_serializer.data, safe=False)
     
     elif request.method == 'POST':
-        reports_data = JSONParser().parse(request)
+        reports_data=request.data
+        #reports_data = JSONParser().parse(request)
         reports_serializer = RapportSerializer(data=reports_data)
         if reports_serializer.is_valid():
             reports_serializer.save()
