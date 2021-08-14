@@ -6,6 +6,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 
 #OneToOne => one to one relationship
 #foreignKey => one to many relationship
@@ -62,8 +63,10 @@ class Rapport(models.Model):
     email_encadrant = models.EmailField(max_length = 254, default=None, blank=True, null=True)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")
     telephone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
-    lien_rapport = models.URLField(max_length = 200)
-    rapport_confidentiel = models.BooleanField(default=True)
+    fichier_rapport = models.FileField(
+        blank=False, null=False,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+    rapport_confidentiel = models.BooleanField(default=False)
     #one to many relationship (with Etudiant)
     fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
 
