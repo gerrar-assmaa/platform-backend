@@ -23,7 +23,33 @@ class EtudiantList(generics.ListCreateAPIView):
 class EtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Etudiant.objects.all()
     serializer_class = EtudiantSerializer
+
+@api_view(['GET', 'POST', 'DELETE'])
+def EtudiantListFiltered(request):
+    # GET list of etudiants, POST a new etudiant, DELETE all etudiants
+    if request.method == 'GET':
+        etudiants = Etudiant.objects.all()
+        
+        user = request.GET.get('user', None)
+        if user is not None:
+            etudiants = etudiants.filter(fk_user=user)
+        
+        etudiants_serializer = EtudiantSerializer(etudiants, many=True)
+        return JsonResponse(etudiants_serializer.data, safe=False)
     
+    elif request.method == 'POST':
+        etudiant_data = JSONParser().parse(request)
+        etudiant_serializer = EtudiantSerializer(data=etudiant_data)
+        if etudiant_serializer.is_valid():
+            etudiant_serializer.save()
+            return JsonResponse(etudiant_serializer.data, status=status.HTTP_201_CREATED) 
+        return JsonResponse(etudiant_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        count = Etudiant.objects.all().delete()
+        return JsonResponse({'message': '{} etudiants were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)        
+
+
 #insertion
 class InsertionList(generics.ListCreateAPIView):
     queryset = Insertion.objects.all()

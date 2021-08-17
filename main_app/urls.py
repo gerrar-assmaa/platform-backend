@@ -9,7 +9,8 @@ urlpatterns = [
     path('professeurs/',views.ProfesseurList.as_view()),
     path('professeurs/<int:pk>/',views.ProfesseurDetail.as_view()),
     #etudiants
-    path('etudiants/',views.EtudiantList.as_view()),
+    path('etudiants',views.EtudiantListFiltered),
+    path('etudiants/',views.EtudiantListFiltered),
     path('etudiants/<int:pk>/',views.EtudiantDetail.as_view()),
     #insertions
     path('insertions',views.InsertionListFiltered),
