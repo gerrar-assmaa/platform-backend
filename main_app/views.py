@@ -1,3 +1,5 @@
+from django.http import request
+from django.http import response
 from django.http.response import JsonResponse
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser 
 from rest_framework import generics
@@ -5,7 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 #necessary imports (models & serializers)
 from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
-from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer
+from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer
   
 
 #professeur
@@ -22,7 +24,13 @@ class EtudiantList(generics.ListCreateAPIView):
     serializer_class = EtudiantSerializer
 class EtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Etudiant.objects.all()
-    serializer_class = EtudiantSerializer
+    # serializer_class = EtudiantSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ReadEtudiantSerializer
+        else:
+            return EtudiantSerializer
 
 @api_view(['GET', 'POST', 'DELETE'])
 def EtudiantListFiltered(request):
@@ -34,7 +42,7 @@ def EtudiantListFiltered(request):
         if user is not None:
             etudiants = etudiants.filter(fk_user=user)
         
-        etudiants_serializer = EtudiantSerializer(etudiants, many=True)
+        etudiants_serializer = ReadEtudiantSerializer(etudiants, many=True)
         return JsonResponse(etudiants_serializer.data, safe=False)
     
     elif request.method == 'POST':
@@ -56,7 +64,20 @@ class InsertionList(generics.ListCreateAPIView):
     serializer_class = InsertionSerializer
 class InsertionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Insertion.objects.all()
-    serializer_class = InsertionSerializer
+    # serializer_class = InsertionSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ReadInsertionSerializer
+        else:
+            return InsertionSerializer
+
+    # def list(self, request):
+    #     # Note the use of `get_queryset()` instead of `self.queryset`
+    #     queryset = self.get_queryset()
+    #     serializer = ReadInsertionSerializer(queryset, many=True)
+    #     return response(serializer.data)
+        
 
 @api_view(['GET', 'POST', 'DELETE'])
 def InsertionListFiltered(request):
@@ -68,7 +89,7 @@ def InsertionListFiltered(request):
         if etudiant is not None:
             insertions = insertions.filter(fk_etudiant=etudiant)
         
-        insertions_serializer = InsertionSerializer(insertions, many=True)
+        insertions_serializer = ReadInsertionSerializer(insertions, many=True)
         return JsonResponse(insertions_serializer.data, safe=False)
     
     elif request.method == 'POST':
@@ -89,7 +110,13 @@ class RapportList(generics.ListCreateAPIView):
     serializer_class = RapportSerializer
 class RapportDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rapport.objects.all()
-    serializer_class = RapportSerializer
+    # serializer_class = RapportSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ReadRapportSerializer
+        else:
+            return RapportSerializer
 
 @api_view(['GET', 'POST', 'DELETE'])
 def ReportListFiltered(request):
@@ -102,7 +129,7 @@ def ReportListFiltered(request):
         if etudiant is not None:
             reports = reports.filter(fk_etudiant=etudiant)
         
-        reports_serializer = RapportSerializer(reports, many=True)
+        reports_serializer = ReadRapportSerializer(reports, many=True)
         return JsonResponse(reports_serializer.data, safe=False)
     
     elif request.method == 'POST':

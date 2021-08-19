@@ -53,6 +53,8 @@ class Rapport(models.Model):
     stage_ou_projet = models.BooleanField(default=True)
     date_debut_stage = models.DateField()
     date_fin_stage = models.DateField()
+    type_rapport = models.CharField(max_length=200,blank=False, default='')
+    resume_rapport = models.CharField(max_length=3000,blank=False, default='')
     intitule_stage =models.CharField(max_length=200,blank=False, default='')
     societe_stage = models.CharField(max_length=200, default=None, blank=True, null=True)
     secteur_societe = models.CharField(max_length=200, default=None, blank=True, null=True)
