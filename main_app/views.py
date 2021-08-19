@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import generics
@@ -15,6 +16,22 @@ class ProfesseurList(generics.ListCreateAPIView):
 class ProfesseurDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Professeur.objects.all()
     serializer_class = ProfesseurSerializer
+    
+@api_view(['GET'])
+def ProfessorbyEmail(request):
+    # GET list of reports, POST a new report, DELETE all reports
+    if request.method == 'GET':
+        professeurs = Professeur.objects.all()
+        
+        email = request.GET.get('email', None)
+        if email is not None:
+          try:
+            professeur = professeurs.get(email_pro=email)
+          except ObjectDoesNotExist:
+            professeur = None
+            
+        professeur_Serializer = ProfesseurSerializer(professeur, many=False)
+        return JsonResponse(professeur_Serializer.data, safe=False)
 
 #etudiant
 class EtudiantList(generics.ListCreateAPIView):
@@ -23,7 +40,23 @@ class EtudiantList(generics.ListCreateAPIView):
 class EtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Etudiant.objects.all()
     serializer_class = EtudiantSerializer
-    
+
+@api_view(['GET'])
+def StudentbyEmail(request):
+    # GET list of reports, POST a new report, DELETE all reports
+    if request.method == 'GET':
+        etudiants = Etudiant.objects.all()
+        
+        email = request.GET.get('email', None)
+        if email is not None:
+          try:
+            etudiant = etudiants.get(email_pro=email)
+          except ObjectDoesNotExist:
+            etudiant = None
+            
+        etudiant_Serializer = EtudiantSerializer(etudiant, many=False)
+        return JsonResponse(etudiant_Serializer.data, safe=False)
+
 #insertion
 class InsertionList(generics.ListCreateAPIView):
     queryset = Insertion.objects.all()
