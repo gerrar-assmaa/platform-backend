@@ -32,8 +32,8 @@ class Etudiant(models.Model):
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")    
     telephone = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     filiere = models.CharField(max_length=200,blank=False, default='')
-    promotion = models.DateField()
-    #one to one relationship (with user)
+    promotion = models.CharField(max_length=4,blank=False, default='')
+    #one to one relationship (with utilisateur)
     fk_user = models.OneToOneField(User,on_delete=models.CASCADE)    
 
 class Insertion(models.Model):
