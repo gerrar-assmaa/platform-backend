@@ -1,12 +1,12 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import JsonResponse
-from rest_framework.parsers import JSONParser 
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser 
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework import status
 #necessary imports (models & serializers)
 from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
-from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer
+from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer
   
 
 #professeur
@@ -56,15 +56,60 @@ def StudentbyEmail(request):
             
         etudiant_Serializer = EtudiantSerializer(etudiant, many=False)
         return JsonResponse(etudiant_Serializer.data, safe=False)
+    # serializer_class = EtudiantSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ReadEtudiantSerializer
+        else:
+            return EtudiantSerializer
+
+@api_view(['GET', 'POST', 'DELETE'])
+def EtudiantListFiltered(request):
+    # GET list of etudiants, POST a new etudiant, DELETE all etudiants
+    if request.method == 'GET':
+        etudiants = Etudiant.objects.all()
+        
+        user = request.GET.get('user', None)
+        if user is not None:
+            etudiants = etudiants.filter(fk_user=user)
+        
+        etudiants_serializer = ReadEtudiantSerializer(etudiants, many=True)
+        return JsonResponse(etudiants_serializer.data, safe=False)
+    
+    elif request.method == 'POST':
+        etudiant_data = JSONParser().parse(request)
+        etudiant_serializer = EtudiantSerializer(data=etudiant_data)
+        if etudiant_serializer.is_valid():
+            etudiant_serializer.save()
+            return JsonResponse(etudiant_serializer.data, status=status.HTTP_201_CREATED) 
+        return JsonResponse(etudiant_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        count = Etudiant.objects.all().delete()
+        return JsonResponse({'message': '{} etudiants were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)        
+
 
 #insertion
 class InsertionList(generics.ListCreateAPIView):
     queryset = Insertion.objects.all()
     serializer_class = InsertionSerializer
-
 class InsertionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Insertion.objects.all()
-    serializer_class = InsertionSerializer
+    # serializer_class = InsertionSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ReadInsertionSerializer
+        else:
+            return InsertionSerializer
+
+    # def list(self, request):
+    #     # Note the use of `get_queryset()` instead of `self.queryset`
+    #     queryset = self.get_queryset()
+    #     serializer = ReadInsertionSerializer(queryset, many=True)
+    #     return response(serializer.data)
+        
 
 @api_view(['GET', 'POST', 'DELETE'])
 def InsertionListFiltered(request):
@@ -76,7 +121,7 @@ def InsertionListFiltered(request):
         if etudiant is not None:
             insertions = insertions.filter(fk_etudiant=etudiant)
         
-        insertions_serializer = InsertionSerializer(insertions, many=True)
+        insertions_serializer = ReadInsertionSerializer(insertions, many=True)
         return JsonResponse(insertions_serializer.data, safe=False)
     
     elif request.method == 'POST':
@@ -97,10 +142,17 @@ class RapportList(generics.ListCreateAPIView):
     serializer_class = RapportSerializer
 class RapportDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rapport.objects.all()
-    serializer_class = RapportSerializer
+    # serializer_class = RapportSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ReadRapportSerializer
+        else:
+            return RapportSerializer
 
 @api_view(['GET', 'POST', 'DELETE'])
 def ReportListFiltered(request):
+    parser_classes = (MultiPartParser, FormParser)
     # GET list of reports, POST a new report, DELETE all reports
     if request.method == 'GET':
         reports = Rapport.objects.all()
@@ -109,11 +161,12 @@ def ReportListFiltered(request):
         if etudiant is not None:
             reports = reports.filter(fk_etudiant=etudiant)
         
-        reports_serializer = RapportSerializer(reports, many=True)
+        reports_serializer = ReadRapportSerializer(reports, many=True)
         return JsonResponse(reports_serializer.data, safe=False)
     
     elif request.method == 'POST':
-        reports_data = JSONParser().parse(request)
+        reports_data=request.data
+        #reports_data = JSONParser().parse(request)
         reports_serializer = RapportSerializer(data=reports_data)
         if reports_serializer.is_valid():
             reports_serializer.save()

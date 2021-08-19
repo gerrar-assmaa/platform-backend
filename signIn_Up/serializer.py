@@ -10,9 +10,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('id','username','password','first_name', 'last_name','email','groups')
         extra_kwargs = {
             'password':{'write_only': True},
-            'email':{ 'validators': [
-                UniqueValidator(queryset= User.objects.all())
-            ] 
+            'email':{
+                'validators': [UniqueValidator(queryset= User.objects.all())] 
             }
         }
     def create(self, validated_data):
