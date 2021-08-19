@@ -33,7 +33,7 @@ class Etudiant(models.Model):
     telephone = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     filiere = models.CharField(max_length=200,blank=False, default='')
     promotion = models.DateField()
-    #one to one relationship (with utilisateur)
+    #one to one relationship (with user)
     fk_user = models.OneToOneField(User,on_delete=models.CASCADE)    
 
 class Insertion(models.Model):
@@ -53,6 +53,8 @@ class Rapport(models.Model):
     stage_ou_projet = models.BooleanField(default=True)
     date_debut_stage = models.DateField()
     date_fin_stage = models.DateField()
+    type_rapport = models.CharField(max_length=200,blank=False, default='')
+    resume_rapport = models.CharField(max_length=3000,blank=False, default='')
     intitule_stage =models.CharField(max_length=200,blank=False, default='')
     societe_stage = models.CharField(max_length=200, default=None, blank=True, null=True)
     secteur_societe = models.CharField(max_length=200, default=None, blank=True, null=True)
