@@ -46,7 +46,7 @@ class ReadEtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method == 'GET':
             return ReadEtudiantSerializer
         else:
-            return EtudiantSerializer    
+            return EtudiantSerializer
 
 @api_view(['GET'])
 def StudentbyEmail(request):
@@ -64,6 +64,8 @@ def StudentbyEmail(request):
         etudiant_Serializer = EtudiantSerializer(etudiant, many=False)
         return JsonResponse(etudiant_Serializer.data, safe=False)
     # serializer_class = EtudiantSerializer
+
+    
 
 @api_view(['GET', 'POST', 'DELETE'])
 def EtudiantListFiltered(request):
