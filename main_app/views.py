@@ -33,22 +33,36 @@ def ProfessorbyEmail(request):
         professeur_Serializer = ProfesseurSerializer(professeur, many=False)
         return JsonResponse(professeur_Serializer.data, safe=False)
 
+@api_view(['GET'])
+def ProfessorbyUserId(request):
+    # GET list of reports, POST a new report, DELETE all reports
+    if request.method == 'GET':
+        professeurs = Professeur.objects.all()
+        
+        user = request.GET.get('user', None)
+        if user is not None:
+          try:
+            professeur = professeurs.get(fk_user=user)
+          except ObjectDoesNotExist:
+            professeur = None
+            
+        professeur_Serializer = ProfesseurSerializer(professeur, many=False)
+        return JsonResponse(professeur_Serializer.data, safe=False)
+
+
 #etudiant
 class EtudiantList(generics.ListCreateAPIView):
     queryset = Etudiant.objects.all()
     serializer_class = EtudiantSerializer
 class EtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Etudiant.objects.all()
-    serializer_class = EtudiantSerializer
-class ReadEtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Insertion.objects.all()
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return ReadEtudiantSerializer
         else:
             return EtudiantSerializer
 
-@api_view(['GET'])
+@api_view(['GET']) 
 def StudentbyEmail(request):
     # GET list of reports, POST a new report, DELETE all reports
     if request.method == 'GET':
@@ -61,11 +75,26 @@ def StudentbyEmail(request):
           except ObjectDoesNotExist:
             etudiant = None
             
-        etudiant_Serializer = EtudiantSerializer(etudiant, many=False)
+        etudiant_Serializer = ReadEtudiantSerializer(etudiant, many=False)
         return JsonResponse(etudiant_Serializer.data, safe=False)
     # serializer_class = EtudiantSerializer
 
-    
+@api_view(['GET']) 
+def StudentbyName(request):
+    # GET list of reports, POST a new report, DELETE all reports
+    if request.method == 'GET':
+        etudiants = Etudiant.objects.all()
+        
+        name = request.GET.get('name', None)
+        if name is not None:
+          try:
+            etudiant = etudiants.get(nom_prenom=name)
+          except ObjectDoesNotExist:
+            etudiant = None
+            
+        etudiant_Serializer = ReadEtudiantSerializer(etudiant, many=False)
+        return JsonResponse(etudiant_Serializer.data, safe=False)
+    # serializer_class = EtudiantSerializer
 
 @api_view(['GET', 'POST', 'DELETE'])
 def EtudiantListFiltered(request):

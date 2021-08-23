@@ -25,10 +25,8 @@ class EtudiantSerializer(serializers.ModelSerializer):
         model = Etudiant
         fields = "__all__" 
         extra_kwargs = {
-            'email_pro':{ 'validators': [
-                UniqueValidator(queryset= Etudiant.objects.all())
-            ] 
-            }
+            'email_pro':{ 'validators': [UniqueValidator(queryset= Etudiant.objects.all())]},
+            'nom_prenom':{ 'validators': [UniqueValidator(queryset= Etudiant.objects.all())]}
         }   
 class ReadEtudiantSerializer(serializers.ModelSerializer):
     fk_user = UserSerializer()
