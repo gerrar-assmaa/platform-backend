@@ -13,6 +13,7 @@ from django.core.validators import FileExtensionValidator
 #ManyToMany => many to many relationship
 
 class Professeur(models.Model):
+    nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     prenom = models.CharField(max_length=200,blank=False, default='')
     nom = models.CharField(max_length=200,blank=False, default='')
     email_perso = models.EmailField(max_length = 254, default=None, blank=True, null=True)

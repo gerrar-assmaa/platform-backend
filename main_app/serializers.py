@@ -14,11 +14,9 @@ class ProfesseurSerializer(serializers.ModelSerializer):
         model = Professeur
         fields = "__all__"
         extra_kwargs = {
-            'email_pro':{ 'validators': [
-                UniqueValidator(queryset= Professeur.objects.all())
-            ] 
-        }
-    }  
+            'email_pro':{ 'validators': [UniqueValidator(queryset= Professeur.objects.all())]}, 
+            'nom_prenom':{ 'validators': [UniqueValidator(queryset= Professeur.objects.all())]}
+        }  
 
 class EtudiantSerializer(serializers.ModelSerializer):
     class Meta:
