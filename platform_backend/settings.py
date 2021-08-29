@@ -43,7 +43,11 @@ INSTALLED_APPS = [
     # CORS
     'corsheaders',
     'signIn_Up',
+    'gdstorage', #added for drive storage 
 ]
+
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = 'platformstage-70061fc3a7e1.json'
+GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = '<base google drive path for file uploads>'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
