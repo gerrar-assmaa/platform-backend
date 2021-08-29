@@ -8,6 +8,13 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 
+#instantiate the storage on you models.py file before using into the models:
+from gdstorage.storage import GoogleDriveStorage
+
+# Define Google Drive Storage
+gd_storage = GoogleDriveStorage()
+
+
 #OneToOne => one to one relationship
 #foreignKey => one to many relationship
 #ManyToMany => many to many relationship
@@ -69,7 +76,8 @@ class Rapport(models.Model):
     telephone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     fichier_rapport = models.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
-        default=None, blank=True, null=True)#CHANGED
+        default=None, blank=True, null=True,
+        storage=gd_storage)#CHANGED
     rapport_confidentiel = models.BooleanField(default=False)
     #one to many relationship (with Etudiant)
     fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
