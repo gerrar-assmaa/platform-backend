@@ -9,14 +9,15 @@ from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
 from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer
   
 
-#professeur
+
+#professeur=====================================================================
 class ProfesseurList(generics.ListCreateAPIView):
     queryset = Professeur.objects.all()
     serializer_class = ProfesseurSerializer
 class ProfesseurDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Professeur.objects.all()
     serializer_class = ProfesseurSerializer
-    
+
 @api_view(['GET'])
 def ProfessorbyEmail(request):
     # GET list of reports, POST a new report, DELETE all reports
@@ -48,9 +49,10 @@ def ProfessorbyUserId(request):
             
         professeur_Serializer = ProfesseurSerializer(professeur, many=False)
         return JsonResponse(professeur_Serializer.data, safe=False)
+#===============================================================================
 
 
-#etudiant
+#etudiant=======================================================================
 class EtudiantList(generics.ListCreateAPIView):
     queryset = Etudiant.objects.all()
     serializer_class = EtudiantSerializer
@@ -120,9 +122,10 @@ def EtudiantListFiltered(request):
     elif request.method == 'DELETE':
         count = Etudiant.objects.all().delete()
         return JsonResponse({'message': '{} etudiants were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)        
+#===============================================================================
 
 
-#insertion
+#insertion=======================================================================
 class InsertionList(generics.ListCreateAPIView):
     queryset = Insertion.objects.all()
     serializer_class = InsertionSerializer
@@ -142,7 +145,6 @@ class InsertionDetail(generics.RetrieveUpdateDestroyAPIView):
     #     serializer = ReadInsertionSerializer(queryset, many=True)
     #     return response(serializer.data)
         
-
 @api_view(['GET', 'POST', 'DELETE'])
 def InsertionListFiltered(request):
     # GET list of insertions, POST a new insertion, DELETE all insertions
@@ -167,8 +169,10 @@ def InsertionListFiltered(request):
     elif request.method == 'DELETE':
         count = Insertion.objects.all().delete()
         return JsonResponse({'message': '{} insertions were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)        
+#===============================================================================
 
-#rapport
+
+#rapport=========================================================================
 class RapportList(generics.ListCreateAPIView):
     queryset = Rapport.objects.all()
     serializer_class = RapportSerializer
@@ -208,13 +212,17 @@ def ReportListFiltered(request):
     elif request.method == 'DELETE':
         count = Rapport.objects.all().delete()
         return JsonResponse({'message': '{} reports were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)
+#===============================================================================
 
-#motcle
+
+#motcle========================================================================
 class MotCleList(generics.ListCreateAPIView):
     queryset = MotCle.objects.all()
     serializer_class = MotCleSerializer
 class MotCleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MotCle.objects.all()
     serializer_class = MotCleSerializer  
+#===============================================================================    
+
 
    
