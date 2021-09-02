@@ -7,13 +7,16 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
+from django.dispatch import receiver
+from django.urls import reverse
+from django_rest_passwordreset.signals import reset_password_token_created
+from django.core.mail import send_mail  
 
 #instantiate the storage on you models.py file before using into the models:
 from gdstorage.storage import GoogleDriveStorage
 
 # Define Google Drive Storage
 gd_storage = GoogleDriveStorage()
-
 
 #OneToOne => one to one relationship
 #foreignKey => one to many relationship
@@ -86,4 +89,3 @@ class MotCle(models.Model):
     mot = models.CharField(max_length=200,blank=False, default='')
     #many to many relationship (with rapport)
     rapports = models.ManyToManyField(Rapport)
-
