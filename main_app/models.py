@@ -18,7 +18,6 @@ from gdstorage.storage import GoogleDriveStorage
 # Define Google Drive Storage
 gd_storage = GoogleDriveStorage()
 
-
 #OneToOne => one to one relationship
 #foreignKey => one to many relationship
 #ManyToMany => many to many relationship
