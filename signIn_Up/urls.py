@@ -9,4 +9,5 @@ urlpatterns = [
     path('In/token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('In/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('Up', RegisterApi.as_view()),
+    path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
