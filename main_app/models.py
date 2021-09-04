@@ -63,8 +63,8 @@ class Insertion(models.Model):
 
 class Rapport(models.Model):
     stage_ou_projet = models.BooleanField(default=True)
-    date_debut_stage = models.DateField()
-    date_fin_stage = models.DateField()
+    date_debut_stage = models.DateField(default=None, blank=True, null=True)#CHANGED
+    date_fin_stage = models.DateField(default=None, blank=True, null=True)#CHANGED
     type_rapport = models.CharField(max_length=200,blank=False, default='')
     resume_rapport = models.CharField(max_length=3000, default=None, blank=True, null=True)#CHANGED
     intitule_stage =models.CharField(max_length=200,blank=False, default='')
@@ -79,7 +79,7 @@ class Rapport(models.Model):
     telephone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     fichier_rapport = models.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
-        default=None, blank=True, null=True,
+        blank=False, default='',
         storage=gd_storage)#CHANGED
     rapport_confidentiel = models.BooleanField(default=False)
     #one to many relationship (with Etudiant)

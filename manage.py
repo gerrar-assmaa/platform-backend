@@ -15,6 +15,8 @@ def main():
     # Override default port for `runserver` command
     from django.core.management.commands.runserver import Command as runserver
     runserver.default_port = "8080"
+
+    os.popen("cmd.exe /c chcp 1252")
     
     try:
         from django.core.management import execute_from_command_line
