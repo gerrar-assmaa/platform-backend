@@ -1,16 +1,8 @@
-#import re
-#from django.core.exceptions import ObjectDoesNotExist
-#from django.contrib.auth.hashers import check_password
-
 from django.db import models
 from django.core.validators import RegexValidator
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
-from django.dispatch import receiver
-from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
-from django.core.mail import send_mail  
 
 #instantiate the storage on you models.py file before using into the models:
 from gdstorage.storage import GoogleDriveStorage
@@ -59,6 +51,7 @@ class Insertion(models.Model):
     ville = models.CharField(max_length=200, default=None, blank=True, null=True)
     date_integration = models.DateField(default=None, blank=True, null=True)
     #one to one relationship (with Etudiant)
+    #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE)    
 
 class Rapport(models.Model):
@@ -80,12 +73,13 @@ class Rapport(models.Model):
     fichier_rapport = models.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         blank=False, default='',
-        storage=gd_storage)#CHANGED
+        storage=gd_storage,)#CHANGED
     rapport_confidentiel = models.BooleanField(default=False)
     #one to many relationship (with Etudiant)
+    #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
 
-class MotCle(models.Model):
-    mot = models.CharField(max_length=200,blank=False, default='')
-    #many to many relationship (with rapport)
-    rapports = models.ManyToManyField(Rapport)
+# class MotCle(models.Model):
+#     mot = models.CharField(max_length=200,blank=False, default='')
+#     #many to many relationship (with rapport)
+#     rapports = models.ManyToManyField(Rapport)

@@ -6,6 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
+    os.popen("cmd.exe /c chcp 1252")
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'platform_backend.settings')
     
     #added to always run on default port of 8080
@@ -16,7 +17,6 @@ def main():
     from django.core.management.commands.runserver import Command as runserver
     runserver.default_port = "8080"
 
-    os.popen("cmd.exe /c chcp 1252")
     
     try:
         from django.core.management import execute_from_command_line
