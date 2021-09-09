@@ -5,8 +5,8 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework import status
 #necessary imports (models & serializers)
-from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
-from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer
+from main_app.models import Professeur, Etudiant, Insertion, Rapport, Forms
+from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer,FormSerializer
   
 
 
@@ -53,9 +53,9 @@ def ProfessorbyUserId(request):
 
 
 #etudiant=======================================================================
-class EtudiantList(generics.ListCreateAPIView):
-    queryset = Etudiant.objects.all()
-    serializer_class = EtudiantSerializer
+# class EtudiantList(generics.ListCreateAPIView):
+#     queryset = Etudiant.objects.all()
+#     serializer_class = EtudiantSerializer
 class EtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Etudiant.objects.all()
     def get_serializer_class(self):
@@ -126,9 +126,9 @@ def EtudiantListFiltered(request):
 
 
 #insertion=======================================================================
-class InsertionList(generics.ListCreateAPIView):
-    queryset = Insertion.objects.all()
-    serializer_class = InsertionSerializer
+# class InsertionList(generics.ListCreateAPIView):
+#     queryset = Insertion.objects.all()
+#     serializer_class = InsertionSerializer
 class InsertionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Insertion.objects.all()
     # serializer_class = InsertionSerializer
@@ -171,15 +171,19 @@ def InsertionListFiltered(request):
         return JsonResponse({'message': '{} insertions were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)        
 #===============================================================================
 
-
+reportSet=Rapport.objects.all().prefetch_related('fk_etudiant')
 #rapport=========================================================================
 class RapportList(generics.ListCreateAPIView):
-    queryset = Rapport.objects.all()
+    queryset = reportSet
     serializer_class = RapportSerializer
+    # def get_serializer_class(self):
+    #     if self.request.method == 'GET':
+    #         return ReadRapportSerializer
+    #     else:
+    #         return RapportSerializer
 class RapportDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Rapport.objects.all()
+    queryset = reportSet
     # serializer_class = RapportSerializer
-
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return ReadRapportSerializer
@@ -215,14 +219,18 @@ def ReportListFiltered(request):
 #===============================================================================
 
 
-#motcle========================================================================
-class MotCleList(generics.ListCreateAPIView):
-    queryset = MotCle.objects.all()
-    serializer_class = MotCleSerializer
-class MotCleDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = MotCle.objects.all()
-    serializer_class = MotCleSerializer  
-#===============================================================================    
+# #motcle========================================================================
+# class MotCleList(generics.ListCreateAPIView):
+#     queryset = MotCle.objects.all()
+#     serializer_class = MotCleSerializer
+# class MotCleDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = MotCle.objects.all()
+#     serializer_class = MotCleSerializer  
+# #===============================================================================    
 
+#form
+class FormDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Forms.objects.all()
+    serializer_class = FormSerializer
 
    

@@ -1,3 +1,7 @@
+# import os
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", __file__)
+# import django
+# django.setup()
 """
 Django settings for platform_backend project.
 
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'signIn_Up',
     'gdstorage', #added for drive storage 
     'django_rest_passwordreset',
+    'debug_toolbar',
 ]
 
 REST_FRAMEWORK = {
@@ -56,6 +61,9 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    ##for debugging
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ####
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
@@ -162,3 +170,13 @@ EMAIL_HOST_USER = 'stage@ensam-casa.ma' #stage@ensam-casa.ma
 EMAIL_HOST_PASSWORD = 'gutsoverfear01' #gutsoverfear01
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
+
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
