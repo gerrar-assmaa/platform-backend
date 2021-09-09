@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator 
-from main_app.models import Professeur, Etudiant, Insertion, Rapport
+from main_app.models import Professeur, Etudiant, Insertion, Rapport,Forms
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -69,5 +69,8 @@ class ReadRapportSerializer(serializers.ModelSerializer):
 #         model = MotCle
 #         fields = "__all__"
       
-
+class FormSerializer(serializers.ModelSerializer):      
+    class Meta:
+        model = Forms
+        fields = "__all__"   
                                

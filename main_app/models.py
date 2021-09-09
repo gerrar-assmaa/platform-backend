@@ -79,6 +79,11 @@ class Rapport(models.Model):
     #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
 
+class Forms(models.Model):
+    nom_form = models.CharField(max_length=200,blank=False, default='')
+    active_status = models.BooleanField(default=True)
+
+
 # class MotCle(models.Model):
 #     mot = models.CharField(max_length=200,blank=False, default='')
 #     #many to many relationship (with rapport)
