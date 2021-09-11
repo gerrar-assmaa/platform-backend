@@ -5,10 +5,10 @@ from django.core.validators import FileExtensionValidator
 from django_rest_passwordreset.signals import reset_password_token_created
 
 #instantiate the storage on you models.py file before using into the models:
-from gdstorage.storage import GoogleDriveStorage
+# from gdstorage.storage import GoogleDriveStorage
 
-# Define Google Drive Storage
-gd_storage = GoogleDriveStorage()
+# # Define Google Drive Storage
+# gd_storage = GoogleDriveStorage()
 
 #OneToOne => one to one relationship
 #foreignKey => one to many relationship
@@ -73,7 +73,8 @@ class Rapport(models.Model):
     fichier_rapport = models.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         blank=False, default='',
-        storage=gd_storage,)#CHANGED
+        upload_to='media')
+        #storage=gd_storage,)#CHANGED
     rapport_confidentiel = models.BooleanField(default=False)
     #one to many relationship (with Etudiant)
     #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
