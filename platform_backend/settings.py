@@ -152,8 +152,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/reportFiles/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "reportFiles")
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = os.path.join(BASE_DIR,'platformstage-70061fc3a7e1.json')
 # GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = 'GoogleMedia/'

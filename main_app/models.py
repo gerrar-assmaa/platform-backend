@@ -72,7 +72,8 @@ class Rapport(models.Model):
     telephone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     fichier_rapport = models.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
-        blank=False, default='',)
+        blank=False, default='',
+        upload_to='media')
         #storage=gd_storage,)#CHANGED
     rapport_confidentiel = models.BooleanField(default=False)
     #one to many relationship (with Etudiant)
