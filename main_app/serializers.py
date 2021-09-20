@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator 
-from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
+from main_app.models import Professeur, Etudiant, Insertion, Rapport,Forms
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -45,18 +45,32 @@ class ReadInsertionSerializer(serializers.ModelSerializer):
 class RapportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rapport
-        fields = "__all__"
+        fields ="__all__"
+
+    # file_url = serializers.SerializerMethodField()
+    
+    # class Meta:
+    #     model = Rapport
+    #     fields = ('id','file_url')
+
+    # def get_file_url(self, rapport):
+    #     request = self.context.get('request')
+    #     file_url = rapport.fichier_rapport.url
+    #     return request.build_absolute_uri(file_url)
+
 class ReadRapportSerializer(serializers.ModelSerializer):
     fk_etudiant = EtudiantSerializer()
     class Meta:
         model = Rapport
         fields = "__all__"        
 
-class MotCleSerializer(serializers.ModelSerializer):
+# class MotCleSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MotCle
+#         fields = "__all__"
+      
+class FormSerializer(serializers.ModelSerializer):      
     class Meta:
-        model = MotCle
-        fields = "__all__"
-
-          
-
+        model = Forms
+        fields = "__all__"   
                                

@@ -1,22 +1,14 @@
-#import re
-#from django.core.exceptions import ObjectDoesNotExist
-#from django.contrib.auth.hashers import check_password
-
 from django.db import models
 from django.core.validators import RegexValidator
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
-from django.dispatch import receiver
-from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
-from django.core.mail import send_mail  
 
 #instantiate the storage on you models.py file before using into the models:
-from gdstorage.storage import GoogleDriveStorage
+# from gdstorage.storage import GoogleDriveStorage
 
-# Define Google Drive Storage
-gd_storage = GoogleDriveStorage()
+# # Define Google Drive Storage
+# gd_storage = GoogleDriveStorage()
 
 #OneToOne => one to one relationship
 #foreignKey => one to many relationship
@@ -59,12 +51,13 @@ class Insertion(models.Model):
     ville = models.CharField(max_length=200, default=None, blank=True, null=True)
     date_integration = models.DateField(default=None, blank=True, null=True)
     #one to one relationship (with Etudiant)
+    #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE)    
 
 class Rapport(models.Model):
     stage_ou_projet = models.BooleanField(default=True)
-    date_debut_stage = models.DateField()
-    date_fin_stage = models.DateField()
+    date_debut_stage = models.DateField(default=None, blank=True, null=True)#CHANGED
+    date_fin_stage = models.DateField(default=None, blank=True, null=True)#CHANGED
     type_rapport = models.CharField(max_length=200,blank=False, default='')
     resume_rapport = models.CharField(max_length=3000, default=None, blank=True, null=True)#CHANGED
     intitule_stage =models.CharField(max_length=200,blank=False, default='')
@@ -79,13 +72,20 @@ class Rapport(models.Model):
     telephone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     fichier_rapport = models.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
-        default=None, blank=True, null=True,
-        storage=gd_storage)#CHANGED
+        blank=False, default='',
+        upload_to='media')
+        #storage=gd_storage,)#CHANGED
     rapport_confidentiel = models.BooleanField(default=False)
     #one to many relationship (with Etudiant)
+    #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
 
-class MotCle(models.Model):
-    mot = models.CharField(max_length=200,blank=False, default='')
-    #many to many relationship (with rapport)
-    rapports = models.ManyToManyField(Rapport)
+class Forms(models.Model):
+    nom_form = models.CharField(max_length=200,blank=False, default='')
+    active_status = models.BooleanField(default=True)
+
+
+# class MotCle(models.Model):
+#     mot = models.CharField(max_length=200,blank=False, default='')
+#     #many to many relationship (with rapport)
+#     rapports = models.ManyToManyField(Rapport)
