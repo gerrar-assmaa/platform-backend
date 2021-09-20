@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import JsonResponse
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser 
@@ -6,9 +7,12 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 #necessary imports (models & serializers)
 from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
-from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer
+from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer, UserSerializer
   
-
+#User=====================================================================
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 #professeur=====================================================================
 class ProfesseurList(generics.ListCreateAPIView):
