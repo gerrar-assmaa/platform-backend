@@ -7,7 +7,8 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 #necessary imports (models & serializers)
 from main_app.models import Professeur, Etudiant, Insertion, Rapport, Forms
-from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer,FormSerializer,UserSerializer
+from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer,FormSerializer, UserSerializer
+
   
 #User=====================================================================
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):

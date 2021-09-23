@@ -78,6 +78,7 @@ class Rapport(models.Model):
     rapport_confidentiel = models.BooleanField(default=False)
     #one to many relationship (with Etudiant)
     #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
+    valid_admin = models.BooleanField(default=False,blank=False,null=False) #admin validation field
     fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
 
 class Forms(models.Model):
