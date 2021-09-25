@@ -221,6 +221,21 @@ def ReportListFiltered(request):
     elif request.method == 'DELETE':
         count = Rapport.objects.all().delete()
         return JsonResponse({'message': '{} reports were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+def ReportByJurys(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        jury = request.GET.get('jury', None)
+        if jury is not None:
+          try:
+            report = reports.filter(jurys=jury)
+          except ObjectDoesNotExist:
+            report = None
+            
+        rapport_Serializer = ReadRapportSerializer(report, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
 #===============================================================================
 
 

@@ -39,6 +39,7 @@ urlpatterns = [
     path('rapports/<int:pk>',views.RapportDetail.as_view()),
     path('rapports',views.ReportListFiltered),
     path('rapports/',views.ReportListFiltered),
+    path('rapports/jury',views.ReportByJurys),
 
     #forms
     path('forms/<int:pk>',views.FormDetail.as_view()),

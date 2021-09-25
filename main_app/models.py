@@ -56,6 +56,7 @@ class Insertion(models.Model):
     fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE)    
 
 class Rapport(models.Model):
+    horodateur = models.DateField(default=None)#CHANGED
     stage_ou_projet = models.BooleanField(default=True)
     date_debut_stage = models.DateField(default=None, blank=True, null=True)#CHANGED
     date_fin_stage = models.DateField(default=None, blank=True, null=True)#CHANGED
@@ -67,16 +68,17 @@ class Rapport(models.Model):
     ville_societe = models.CharField(max_length=200, default=None, blank=True, null=True)
     pays_societe = models.CharField(max_length=200, default=None, blank=True, null=True)
     details_add_societe = models.CharField(max_length=200, default=None, blank=True, null=True)
-    encadrant = models.CharField(max_length=200, default=None, blank=True, null=True)
-    email_encadrant = models.EmailField(max_length = 254, default=None, blank=True, null=True)
+    parrain = models.CharField(max_length=200, default=None, blank=True, null=True)
+    email_parrain = models.EmailField(max_length = 254, default=None, blank=True, null=True)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{8,15}$")
-    telephone_encadrant = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
+    telephone_parrain = models.CharField(validators = [phoneNumberRegex], max_length = 16, default=None, blank=True, null=True)
     fichier_rapport = models.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         blank=False, default='',
         upload_to='media')
         #storage=gd_storage,)#CHANGED
     rapport_confidentiel = models.BooleanField(default=False)
+    jurys  = models.ManyToManyField(Professeur, blank=True)
     #one to many relationship (with Etudiant)
     #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     valid_admin = models.BooleanField(default=False,blank=False,null=False) #admin validation field
