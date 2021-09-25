@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
+from django.db.models.deletion import DO_NOTHING
 from django_rest_passwordreset.signals import reset_password_token_created
 
 #instantiate the storage on you models.py file before using into the models:
@@ -79,6 +80,8 @@ class Rapport(models.Model):
     #one to many relationship (with Etudiant)
     #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     valid_admin = models.BooleanField(default=False,blank=False,null=False) #admin validation field
+    valid_encadrant = models.BooleanField(default=None, blank=True, null=True) #professor validation field
+    fk_encadrant_univ = models.ForeignKey(Professeur, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
     fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
 
 class Forms(models.Model):
