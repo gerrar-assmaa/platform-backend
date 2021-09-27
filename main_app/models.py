@@ -78,7 +78,7 @@ class Rapport(models.Model):
         upload_to='media')
         #storage=gd_storage,)#CHANGED
     rapport_confidentiel = models.BooleanField(default=False)
-    jurys  = models.ManyToManyField(Professeur, blank=True)
+    jurys  = models.ManyToManyField(Professeur, blank=True,related_name="fk_jury")
     #one to many relationship (with Etudiant)
     #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
     valid_admin = models.BooleanField(default=False,blank=False,null=False) #admin validation field
