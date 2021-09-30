@@ -45,8 +45,9 @@ urlpatterns = [
     path('forms/<int:pk>',views.FormDetail.as_view()),
 
     #mot clés
-    # path('motCles/',views.MotCleList.as_view()),
-    # path('motCles/<int:pk>/',views.MotCleDetail.as_view()),
+    path('motCles/',views.MotCleList.as_view()),
+    path('motCles/<int:pk>',views.MotCleDetail.as_view()),
+    path('motCles/mot',views.getIdMot),
 ]
 
 

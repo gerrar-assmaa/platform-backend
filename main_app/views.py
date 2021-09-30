@@ -6,8 +6,8 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework import status
 #necessary imports (models & serializers)
-from main_app.models import Professeur, Etudiant, Insertion, Rapport, Forms
-from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer,FormSerializer, UserSerializer
+from main_app.models import MotCle, Professeur, Etudiant, Insertion, Rapport, Forms
+from main_app.serializers import MotCleSerializer, ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer,FormSerializer, UserSerializer
 
   
 #User=====================================================================
@@ -239,14 +239,29 @@ def ReportByJurys(request):
 #===============================================================================
 
 
-# #motcle========================================================================
-# class MotCleList(generics.ListCreateAPIView):
-#     queryset = MotCle.objects.all()
-#     serializer_class = MotCleSerializer
-# class MotCleDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = MotCle.objects.all()
-#     serializer_class = MotCleSerializer  
-# #===============================================================================    
+#motcle========================================================================
+class MotCleList(generics.ListCreateAPIView):
+    queryset = MotCle.objects.all()
+    serializer_class = MotCleSerializer
+class MotCleDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MotCle.objects.all()
+    serializer_class = MotCleSerializer
+
+@api_view(['GET'])
+def getIdMot(request):
+    if request.method == 'GET':
+        motCles = MotCle.objects.all()
+        
+        mot = request.GET.get('mot', None)
+        if mot is not None:
+          try:
+            motCle = motCles.get(mot=mot)
+          except ObjectDoesNotExist:
+            motCle = None
+            
+        motCle_Serializer = MotCleSerializer(motCle, many=False)
+        return JsonResponse(motCle_Serializer.data, safe=False)  
+#===============================================================================    
 
 #form
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
