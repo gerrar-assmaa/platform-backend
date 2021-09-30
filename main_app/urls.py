@@ -40,6 +40,10 @@ urlpatterns = [
     path('rapports',views.ReportListFiltered),
     path('rapports/',views.ReportListFiltered),
     path('rapports/jury',views.ReportByJurys),
+    path('rapports/adminValidated',views.ReportValidatedAdmin),
+    path('rapports/validated',views.ReportValidated),
+    path('rapports/type',views.ReportListFilteredType), #projet ou stage
+
 
     #forms
     path('forms/<int:pk>',views.FormDetail.as_view()),

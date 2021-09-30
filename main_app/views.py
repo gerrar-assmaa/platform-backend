@@ -200,7 +200,7 @@ def ReportListFiltered(request):
     parser_classes = (MultiPartParser, FormParser)
     # GET list of reports, POST a new report, DELETE all reports
     if request.method == 'GET':
-        reports = Rapport.objects.all()
+        reports = Rapport.objects.all() 
         
         etudiant = request.GET.get('etudiant', None)
         if etudiant is not None:
@@ -236,6 +236,49 @@ def ReportByJurys(request):
             
         rapport_Serializer = ReadRapportSerializer(report, many=True)
         return JsonResponse(rapport_Serializer.data, safe=False)
+
+#rapports validés par admin (et encadrées par un certain professeur)
+@api_view(['GET'])
+def ReportValidatedAdmin(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        #first get all admin validated reports
+        reports = reports.filter(valid_admin=True) 
+
+        fk_encadrant_univ = request.GET.get('fk_encadrant_univ', None)
+        if fk_encadrant_univ is not None:
+            report = reports.filter(fk_encadrant_univ=fk_encadrant_univ)
+
+        rapport_Serializer = ReadRapportSerializer(report, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+        
+@api_view(['GET'])
+def ReportValidated(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        #first get all admin validated reports
+        reports_AV = reports.filter(valid_admin=True) #admin validated reports
+        # PFEreports_NV = reports_AV.filter(type_rapport="PFE",valid_encadrant=False) #PFE NOT VALIDATED == PFE admin validated reports,non validated by professor
+        reports_V = reports_AV.exclude(type_rapport="PFE",valid_encadrant=False) #rapports validés n'importe le type
+
+        rapport_Serializer = ReadRapportSerializer(reports_V, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+
+@api_view(['GET'])
+def ReportListFilteredType(request):
+    parser_classes = (MultiPartParser, FormParser)
+    # GET list of reports, POST a new report, DELETE all reports
+    if request.method == 'GET':
+        reports = Rapport.objects.all() 
+        
+        type = request.GET.get('type', None)
+        if type is not None:
+            reports = reports.filter(stage_ou_projet=type)
+        
+        reports_serializer = ReadRapportSerializer(reports, many=True)
+        return JsonResponse(reports_serializer.data, safe=False)        
 #===============================================================================
 
 
