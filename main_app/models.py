@@ -85,13 +85,14 @@ class Rapport(models.Model):
     valid_encadrant = models.BooleanField(default=None, blank=True, null=True) #professor validation field
     fk_encadrant_univ = models.ForeignKey(Professeur, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
     fk_etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
+    #many to many relationship (with MotCle)
+    mots = models.ManyToManyField('MotCle', blank=True, related_name="fk_mot")
 
 class Forms(models.Model):
     nom_form = models.CharField(max_length=200,blank=False, default='')
     active_status = models.BooleanField(default=True)
 
 
-# class MotCle(models.Model):
-#     mot = models.CharField(max_length=200,blank=False, default='')
-#     #many to many relationship (with rapport)
-#     rapports = models.ManyToManyField(Rapport)
+class MotCle(models.Model):
+    mot = models.CharField(max_length=200,blank=False, default='')
+    
