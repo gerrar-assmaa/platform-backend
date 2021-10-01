@@ -252,6 +252,8 @@ def ReportValidatedAdmin(request):
 
         rapport_Serializer = ReadRapportSerializer(report, many=True)
         return JsonResponse(rapport_Serializer.data, safe=False)
+
+
         
 @api_view(['GET'])
 def ReportValidated(request):
@@ -264,6 +266,17 @@ def ReportValidated(request):
         reports_V = reports_AV.exclude(type_rapport="PFE",valid_encadrant=False) #rapports validés n'importe le type
 
         rapport_Serializer = ReadRapportSerializer(reports_V, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+        
+@api_view(['GET'])
+def ReportNotValidated(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        #first get all admin validated reports
+        reports_NV = reports.filter(valid_admin=False) #admin validated reports
+
+        rapport_Serializer = ReadRapportSerializer(reports_NV, many=True)
         return JsonResponse(rapport_Serializer.data, safe=False)
 
 @api_view(['GET'])
