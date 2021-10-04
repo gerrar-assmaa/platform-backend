@@ -268,6 +268,28 @@ def ReportValidated(request):
         rapport_Serializer = ReadRapportSerializer(reports_V, many=True)
         return JsonResponse(rapport_Serializer.data, safe=False)
         
+        
+@api_view(['GET'])
+def ReportValidatedAndFiltered(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        #first get all admin validated reports
+        reports_AV = reports.filter(valid_admin=True) #admin validated reports
+        # PFEreports_NV = reports_AV.filter(type_rapport="PFE",valid_encadrant=False) #PFE NOT VALIDATED == PFE admin validated reports,non validated by professor
+        reports_V = reports_AV.exclude(type_rapport="PFE",valid_encadrant=False) #rapports validés n'importe le type
+
+        year = request.GET.get('year', None)
+        filiere = request.GET.get('filiere', None)
+        if year is not None:
+            reports_V = reports_V.filter(horodateur__startswith=year)
+        if filiere is not None:
+            etudiant_filiere = Etudiant.objects.filter(filiere=filiere)
+            reports_V = reports_V.filter(fk_etudiant__in=etudiant_filiere)
+
+        rapport_Serializer = ReadRapportSerializer(reports_V, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+        
 @api_view(['GET'])
 def ReportNotValidated(request):
     if request.method == 'GET':
