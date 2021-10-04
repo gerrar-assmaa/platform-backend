@@ -42,6 +42,7 @@ class Etudiant(models.Model):
     fk_user = models.OneToOneField(User,on_delete=models.CASCADE,default=None, blank=True, null=True)#CHANGED 
 
 class Insertion(models.Model):
+    horodateur = models.DateField(default=None)#CHANGED
     cursus_post_ensam = models.CharField(max_length=200, blank=False, default='')
     univ = models.CharField(max_length=200, default=None, blank=True, null=True)
     pays= models.CharField(max_length=200, default=None, blank=True, null=True)
@@ -53,7 +54,10 @@ class Insertion(models.Model):
     date_integration = models.DateField(default=None, blank=True, null=True)
     #one to one relationship (with Etudiant)
     #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
-    fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE)    
+    fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE) 
+
+class MotCle(models.Model):
+    mot = models.CharField(max_length=200,blank=False, default='')   
 
 class Rapport(models.Model):
     horodateur = models.DateField(default=None)#CHANGED
@@ -93,6 +97,5 @@ class Forms(models.Model):
     active_status = models.BooleanField(default=True)
 
 
-class MotCle(models.Model):
-    mot = models.CharField(max_length=200,blank=False, default='')
+
     
