@@ -281,9 +281,9 @@ def ReportValidatedAndFiltered(request):
 
         year = request.GET.get('year', None)
         filiere = request.GET.get('filiere', None)
-        if year is not None:
+        if year is not None and year != "Tout":
             reports_V = reports_V.filter(horodateur__startswith=year)
-        if filiere is not None:
+        if filiere is not None and filiere != "Tout":
             etudiant_filiere = Etudiant.objects.filter(filiere=filiere)
             reports_V = reports_V.filter(fk_etudiant__in=etudiant_filiere)
 
