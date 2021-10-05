@@ -4,6 +4,9 @@ from . import views
  
 
 urlpatterns = [ 
+
+    #User
+    path('user/<int:pk>',views.UserDetail.as_view()),
     #professeurs
     path('professeurs/',views.ProfesseurList.as_view()),
     path('professeurs',views.ProfesseurList.as_view()),
@@ -36,10 +39,21 @@ urlpatterns = [
     path('rapports/<int:pk>',views.RapportDetail.as_view()),
     path('rapports',views.ReportListFiltered),
     path('rapports/',views.ReportListFiltered),
+    path('rapports/jury',views.ReportByJurys),
+    path('rapports/adminValidated',views.ReportValidatedAdmin),
+    path('rapports/validated',views.ReportValidated),
+    path('rapports/validatedFiltered',views.ReportValidatedAndFiltered),
+    path('rapports/notValidated',views.ReportNotValidated),
+    path('rapports/type',views.ReportListFilteredType), #projet ou stage
+
+
+    #forms
+    path('forms/<int:pk>',views.FormDetail.as_view()),
 
     #mot clés
     path('motCles/',views.MotCleList.as_view()),
-    path('motCles/<int:pk>/',views.MotCleDetail.as_view()),
+    path('motCles/<int:pk>',views.MotCleDetail.as_view()),
+    path('motCles/mot',views.getIdMot),
 ]
 
 

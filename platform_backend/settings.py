@@ -1,3 +1,7 @@
+# import os
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", __file__)
+# import django
+# django.setup()
 """
 Django settings for platform_backend project.
 
@@ -43,6 +47,9 @@ INSTALLED_APPS = [
     # CORS
     'corsheaders',
     'signIn_Up',
+    #'gdstorage', #added for drive storage 
+    'django_rest_passwordreset',
+    'debug_toolbar',
 ]
 
 REST_FRAMEWORK = {
@@ -54,6 +61,9 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    ##for debugging
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ####
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
@@ -142,5 +152,33 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = os.path.join(BASE_DIR,'platformstage-70061fc3a7e1.json')
+# GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = 'GoogleMedia/'
+
+
+#GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = None
+#GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE_CONTENTS = {"web":{"client_id":"331113519493-35hv49g6e8p1fo6hiihs7l45m0aqehc6.apps.googleusercontent.com","project_id":"tutorial-project-322113","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"6uc4u5sanC72iGVh-J_iQu9B","javascript_origins":["http://localhost:4200"]}}
+
+#For printing in Backend Terminal Console
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'stage@ensam-casa.ma' #stage@ensam-casa.ma
+EMAIL_HOST_PASSWORD = 'gutsoverfear01' #gutsoverfear01
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
+
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)

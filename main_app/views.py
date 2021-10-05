@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import JsonResponse
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser 
@@ -5,18 +6,23 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework import status
 #necessary imports (models & serializers)
-from main_app.models import Professeur, Etudiant, Insertion, Rapport, MotCle
-from main_app.serializers import ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, MotCleSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer
-  
+from main_app.models import MotCle, Professeur, Etudiant, Insertion, Rapport, Forms
+from main_app.serializers import MotCleSerializer, ProfesseurSerializer, EtudiantSerializer, InsertionSerializer, RapportSerializer, ReadEtudiantSerializer, ReadInsertionSerializer, ReadRapportSerializer,FormSerializer, UserSerializer
 
-#professeur
+  
+#User=====================================================================
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+#professeur=====================================================================
 class ProfesseurList(generics.ListCreateAPIView):
     queryset = Professeur.objects.all()
     serializer_class = ProfesseurSerializer
 class ProfesseurDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Professeur.objects.all()
     serializer_class = ProfesseurSerializer
-    
+
 @api_view(['GET'])
 def ProfessorbyEmail(request):
     # GET list of reports, POST a new report, DELETE all reports
@@ -48,12 +54,13 @@ def ProfessorbyUserId(request):
             
         professeur_Serializer = ProfesseurSerializer(professeur, many=False)
         return JsonResponse(professeur_Serializer.data, safe=False)
+#===============================================================================
 
 
-#etudiant
-class EtudiantList(generics.ListCreateAPIView):
-    queryset = Etudiant.objects.all()
-    serializer_class = EtudiantSerializer
+#etudiant=======================================================================
+# class EtudiantList(generics.ListCreateAPIView):
+#     queryset = Etudiant.objects.all()
+#     serializer_class = EtudiantSerializer
 class EtudiantDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Etudiant.objects.all()
     def get_serializer_class(self):
@@ -120,12 +127,13 @@ def EtudiantListFiltered(request):
     elif request.method == 'DELETE':
         count = Etudiant.objects.all().delete()
         return JsonResponse({'message': '{} etudiants were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)        
+#===============================================================================
 
 
-#insertion
-class InsertionList(generics.ListCreateAPIView):
-    queryset = Insertion.objects.all()
-    serializer_class = InsertionSerializer
+#insertion=======================================================================
+# class InsertionList(generics.ListCreateAPIView):
+#     queryset = Insertion.objects.all()
+#     serializer_class = InsertionSerializer
 class InsertionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Insertion.objects.all()
     # serializer_class = InsertionSerializer
@@ -142,7 +150,6 @@ class InsertionDetail(generics.RetrieveUpdateDestroyAPIView):
     #     serializer = ReadInsertionSerializer(queryset, many=True)
     #     return response(serializer.data)
         
-
 @api_view(['GET', 'POST', 'DELETE'])
 def InsertionListFiltered(request):
     # GET list of insertions, POST a new insertion, DELETE all insertions
@@ -167,15 +174,21 @@ def InsertionListFiltered(request):
     elif request.method == 'DELETE':
         count = Insertion.objects.all().delete()
         return JsonResponse({'message': '{} insertions were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)        
+#===============================================================================
 
-#rapport
+reportSet=Rapport.objects.all().prefetch_related('fk_etudiant')
+#rapport=========================================================================
 class RapportList(generics.ListCreateAPIView):
-    queryset = Rapport.objects.all()
+    queryset = reportSet
     serializer_class = RapportSerializer
+    # def get_serializer_class(self):
+    #     if self.request.method == 'GET':
+    #         return ReadRapportSerializer
+    #     else:
+    #         return RapportSerializer
 class RapportDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Rapport.objects.all()
+    queryset = reportSet
     # serializer_class = RapportSerializer
-
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return ReadRapportSerializer
@@ -187,7 +200,7 @@ def ReportListFiltered(request):
     parser_classes = (MultiPartParser, FormParser)
     # GET list of reports, POST a new report, DELETE all reports
     if request.method == 'GET':
-        reports = Rapport.objects.all()
+        reports = Rapport.objects.all() 
         
         etudiant = request.GET.get('etudiant', None)
         if etudiant is not None:
@@ -209,12 +222,128 @@ def ReportListFiltered(request):
         count = Rapport.objects.all().delete()
         return JsonResponse({'message': '{} reports were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)
 
-#motcle
+@api_view(['GET'])
+def ReportByJurys(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        jury = request.GET.get('jury', None)
+        if jury is not None:
+          try:
+            report = reports.filter(jurys=jury)
+          except ObjectDoesNotExist:
+            report = None
+            
+        rapport_Serializer = ReadRapportSerializer(report, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+
+#rapports validés par admin (et encadrées par un certain professeur)
+@api_view(['GET'])
+def ReportValidatedAdmin(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        #first get all admin validated reports
+        reports = reports.filter(valid_admin=True) 
+
+        fk_encadrant_univ = request.GET.get('fk_encadrant_univ', None)
+        if fk_encadrant_univ is not None:
+            report = reports.filter(fk_encadrant_univ=fk_encadrant_univ)
+
+        rapport_Serializer = ReadRapportSerializer(report, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+
+
+        
+@api_view(['GET'])
+def ReportValidated(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        #first get all admin validated reports
+        reports_AV = reports.filter(valid_admin=True) #admin validated reports
+        # PFEreports_NV = reports_AV.filter(type_rapport="PFE",valid_encadrant=False) #PFE NOT VALIDATED == PFE admin validated reports,non validated by professor
+        reports_V = reports_AV.exclude(type_rapport="PFE",valid_encadrant=False) #rapports validés n'importe le type
+
+        rapport_Serializer = ReadRapportSerializer(reports_V, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+        
+        
+@api_view(['GET'])
+def ReportValidatedAndFiltered(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        #first get all admin validated reports
+        reports_AV = reports.filter(valid_admin=True) #admin validated reports
+        # PFEreports_NV = reports_AV.filter(type_rapport="PFE",valid_encadrant=False) #PFE NOT VALIDATED == PFE admin validated reports,non validated by professor
+        reports_V = reports_AV.exclude(type_rapport="PFE",valid_encadrant=False) #rapports validés n'importe le type
+
+        year = request.GET.get('year', None)
+        filiere = request.GET.get('filiere', None)
+        if year is not None and year != "Tout":
+            reports_V = reports_V.filter(horodateur__startswith=year)
+        if filiere is not None and filiere != "Tout":
+            etudiant_filiere = Etudiant.objects.filter(filiere=filiere)
+            reports_V = reports_V.filter(fk_etudiant__in=etudiant_filiere)
+
+        rapport_Serializer = ReadRapportSerializer(reports_V, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+        
+@api_view(['GET'])
+def ReportNotValidated(request):
+    if request.method == 'GET':
+        reports = Rapport.objects.all()
+        
+        #first get all admin validated reports
+        reports_NV = reports.filter(valid_admin=False) #admin validated reports
+
+        rapport_Serializer = ReadRapportSerializer(reports_NV, many=True)
+        return JsonResponse(rapport_Serializer.data, safe=False)
+
+@api_view(['GET'])
+def ReportListFilteredType(request):
+    parser_classes = (MultiPartParser, FormParser)
+    # GET list of reports, POST a new report, DELETE all reports
+    if request.method == 'GET':
+        reports = Rapport.objects.all() 
+        
+        type = request.GET.get('type', None)
+        if type is not None:
+            reports = reports.filter(stage_ou_projet=type)
+        
+        reports_serializer = ReadRapportSerializer(reports, many=True)
+        return JsonResponse(reports_serializer.data, safe=False)        
+#===============================================================================
+
+
+#motcle========================================================================
 class MotCleList(generics.ListCreateAPIView):
     queryset = MotCle.objects.all()
     serializer_class = MotCleSerializer
 class MotCleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MotCle.objects.all()
-    serializer_class = MotCleSerializer  
+    serializer_class = MotCleSerializer
+
+@api_view(['GET'])
+def getIdMot(request):
+    if request.method == 'GET':
+        motCles = MotCle.objects.all()
+        
+        mot = request.GET.get('mot', None)
+        if mot is not None:
+          try:
+            motCle = motCles.get(mot=mot)
+          except ObjectDoesNotExist:
+            motCle = None
+            
+        motCle_Serializer = MotCleSerializer(motCle, many=False)
+        return JsonResponse(motCle_Serializer.data, safe=False)  
+#===============================================================================    
+
+#form
+class FormDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Forms.objects.all()
+    serializer_class = FormSerializer
 
    
