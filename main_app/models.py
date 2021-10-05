@@ -42,6 +42,7 @@ class Etudiant(models.Model):
     fk_user = models.OneToOneField(User,on_delete=models.CASCADE,default=None, blank=True, null=True)#CHANGED 
 
 class Insertion(models.Model):
+    horodateur = models.DateField(default=None)#CHANGED
     cursus_post_ensam = models.CharField(max_length=200, blank=False, default='')
     univ = models.CharField(max_length=200, default=None, blank=True, null=True)
     pays= models.CharField(max_length=200, default=None, blank=True, null=True)

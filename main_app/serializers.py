@@ -58,16 +58,18 @@ class RapportSerializer(serializers.ModelSerializer):
     #     file_url = rapport.fichier_rapport.url
     #     return request.build_absolute_uri(file_url)
 
-class ReadRapportSerializer(serializers.ModelSerializer):
-    fk_etudiant = EtudiantSerializer()
-    class Meta:
-        model = Rapport
-        fields = "__all__"        
-
 class MotCleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MotCle
         fields = "__all__"
+
+class ReadRapportSerializer(serializers.ModelSerializer):
+    fk_etudiant = EtudiantSerializer()
+    mots = MotCleSerializer( many=True)
+    class Meta:
+        model = Rapport
+        fields = "__all__"      
+
       
 class FormSerializer(serializers.ModelSerializer):      
     class Meta:
