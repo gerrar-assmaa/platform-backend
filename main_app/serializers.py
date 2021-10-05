@@ -70,7 +70,7 @@ class ReadRapportSerializer(serializers.ModelSerializer):
         model = Rapport
         fields = "__all__"      
 
-      
+     
 class FormSerializer(serializers.ModelSerializer):      
     class Meta:
         model = Forms

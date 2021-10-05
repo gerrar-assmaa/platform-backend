@@ -54,7 +54,10 @@ class Insertion(models.Model):
     date_integration = models.DateField(default=None, blank=True, null=True)
     #one to one relationship (with Etudiant)
     #nom_prenom=models.CharField(max_length=200,blank=False, default='')#ADDED
-    fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE)    
+    fk_etudiant = models.OneToOneField(Etudiant,on_delete=models.CASCADE) 
+
+class MotCle(models.Model):
+    mot = models.CharField(max_length=200,blank=False, default='')   
 
 class Rapport(models.Model):
     horodateur = models.DateField(default=None)#CHANGED
@@ -94,6 +97,5 @@ class Forms(models.Model):
     active_status = models.BooleanField(default=True)
 
 
-class MotCle(models.Model):
-    mot = models.CharField(max_length=200,blank=False, default='')
+
     
