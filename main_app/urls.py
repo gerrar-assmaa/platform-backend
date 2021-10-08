@@ -43,7 +43,7 @@ urlpatterns = [
     path('rapports/adminValidated',views.ReportValidatedAdmin),
     path('rapports/validated',views.ReportValidated),
     path('rapports/validatedFiltered',views.ReportValidatedAndFiltered),
-    path('rapports/notValidated',views.ReportNotValidated),
+    path('rapports/notValidatedFiltered',views.ReportNotValidatedAndFiltered),
     path('rapports/type',views.ReportListFilteredType), #projet ou stage
 
 
