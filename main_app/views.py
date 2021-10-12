@@ -110,8 +110,17 @@ def EtudiantListFiltered(request):
         etudiants = Etudiant.objects.all()
         
         user = request.GET.get('user', None)
+        promotion = request.GET.get('promotion', None)
         if user is not None:
             etudiants = etudiants.filter(fk_user=user)
+        if promotion is not None and promotion!="Tout":
+            promotions=[]
+            for i in range(3):
+                val = int(promotion)-i
+                promotions.append(val)
+            print(promotions)    
+            etudiants = etudiants.filter(promotion__in=promotions)    
+
         
         etudiants_serializer = ReadEtudiantSerializer(etudiants, many=True)
         return JsonResponse(etudiants_serializer.data, safe=False)
