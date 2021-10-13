@@ -281,11 +281,18 @@ def ReportValidatedAndFiltered(request):
 
         year = request.GET.get('year', None)
         filiere = request.GET.get('filiere', None)
+        promotion = request.GET.get('promotion', None)
+        type = request.GET.get('type', None)
+        if type is not None:
+            reports_V = reports_V.filter(stage_ou_projet=type)
         if year is not None and year != "Tout":
             reports_V = reports_V.filter(horodateur__startswith=year)
         if filiere is not None and filiere != "Tout":
             etudiant_filiere = Etudiant.objects.filter(filiere=filiere)
             reports_V = reports_V.filter(fk_etudiant__in=etudiant_filiere)
+        if promotion is not None and promotion != "Tout":
+            etudiant_promotion = Etudiant.objects.filter(promotion=promotion)
+            reports_V = reports_V.filter(fk_etudiant__in=etudiant_promotion)
 
         rapport_Serializer = ReadRapportSerializer(reports_V, many=True)
         return JsonResponse(rapport_Serializer.data, safe=False)
