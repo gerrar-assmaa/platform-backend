@@ -110,8 +110,17 @@ def EtudiantListFiltered(request):
         etudiants = Etudiant.objects.all()
         
         user = request.GET.get('user', None)
+        promotion = request.GET.get('promotion', None)
         if user is not None:
             etudiants = etudiants.filter(fk_user=user)
+        if promotion is not None and promotion!="Tout":
+            promotions=[]
+            for i in range(3):
+                val = int(promotion)-i
+                promotions.append(val)
+            print(promotions)    
+            etudiants = etudiants.filter(promotion__in=promotions)    
+
         
         etudiants_serializer = ReadEtudiantSerializer(etudiants, many=True)
         return JsonResponse(etudiants_serializer.data, safe=False)
@@ -285,6 +294,7 @@ def ReportValidatedAndFiltered(request):
         type = request.GET.get('type', None)
         if type is not None:
             reports_V = reports_V.filter(stage_ou_projet=type)
+        type_rapport = request.GET.get('type_rapport', None)
         if year is not None and year != "Tout":
             reports_V = reports_V.filter(horodateur__startswith=year)
         if filiere is not None and filiere != "Tout":
@@ -293,17 +303,40 @@ def ReportValidatedAndFiltered(request):
         if promotion is not None and promotion != "Tout":
             etudiant_promotion = Etudiant.objects.filter(promotion=promotion)
             reports_V = reports_V.filter(fk_etudiant__in=etudiant_promotion)
+        if type_rapport is not None and type_rapport != "Tout":
+            reports_V = reports_V.filter(type_rapport=type_rapport)
 
         rapport_Serializer = ReadRapportSerializer(reports_V, many=True)
         return JsonResponse(rapport_Serializer.data, safe=False)
-        
+
+
 @api_view(['GET'])
-def ReportNotValidated(request):
+def ReportNotValidatedAndFiltered(request):
     if request.method == 'GET':
         reports = Rapport.objects.all()
         
         #first get all admin validated reports
         reports_NV = reports.filter(valid_admin=False) #admin validated reports
+
+        year = request.GET.get('year', None)
+        filiere = request.GET.get('filiere', None)
+        type_rapport = request.GET.get('type_rapport', None)
+        promotion = request.GET.get('promotion', None)
+        code = request.GET.get('code', None)
+
+        if year is not None and year != "Tout":
+            reports_NV = reports_NV.filter(horodateur__startswith=year)
+        if filiere is not None and filiere != "Tout":
+            etudiant_filiere = Etudiant.objects.filter(filiere=filiere)
+            reports_NV = reports_NV.filter(fk_etudiant__in=etudiant_filiere)
+        if promotion is not None and promotion != "Tout":
+            etudiant_promotion = Etudiant.objects.filter(promotion=promotion)
+            reports_NV = reports_NV.filter(fk_etudiant__in=etudiant_promotion)
+        if code is not None and code != "Tout":
+            etudiant_code = Etudiant.objects.filter(code_etudiant=code)
+            reports_NV = reports_NV.filter(fk_etudiant__in=etudiant_code)
+        if type_rapport is not None and type_rapport != "Tout":
+            reports_NV = reports_NV.filter(type_rapport=type_rapport)
 
         rapport_Serializer = ReadRapportSerializer(reports_NV, many=True)
         return JsonResponse(rapport_Serializer.data, safe=False)
