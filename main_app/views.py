@@ -290,12 +290,19 @@ def ReportValidatedAndFiltered(request):
 
         year = request.GET.get('year', None)
         filiere = request.GET.get('filiere', None)
+        promotion = request.GET.get('promotion', None)
+        type = request.GET.get('type', None)
+        if type is not None:
+            reports_V = reports_V.filter(stage_ou_projet=type)
         type_rapport = request.GET.get('type_rapport', None)
         if year is not None and year != "Tout":
             reports_V = reports_V.filter(horodateur__startswith=year)
         if filiere is not None and filiere != "Tout":
             etudiant_filiere = Etudiant.objects.filter(filiere=filiere)
             reports_V = reports_V.filter(fk_etudiant__in=etudiant_filiere)
+        if promotion is not None and promotion != "Tout":
+            etudiant_promotion = Etudiant.objects.filter(promotion=promotion)
+            reports_V = reports_V.filter(fk_etudiant__in=etudiant_promotion)
         if type_rapport is not None and type_rapport != "Tout":
             reports_V = reports_V.filter(type_rapport=type_rapport)
 
