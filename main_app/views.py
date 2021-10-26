@@ -116,7 +116,7 @@ def EtudiantListFiltered(request):
         if promotion is not None and promotion!="Tout":
             promotions=[]
             for i in range(3):
-                val = int(promotion)-i
+                val = int(promotion)+i
                 promotions.append(val)
             print(promotions)    
             etudiants = etudiants.filter(promotion__in=promotions)    
