@@ -284,11 +284,15 @@ def ReportValidatedAdmin(request):
         reports = Rapport.objects.all()
         
         #first get all admin validated reports
-        reports = reports.filter(valid_admin=True) 
-
+        reports = reports.filter(valid_admin=True)
+        
+        year = request.GET.get('year', None) 
         fk_encadrant_univ = request.GET.get('fk_encadrant_univ', None)
+
         if fk_encadrant_univ is not None:
             report = reports.filter(fk_encadrant_univ=fk_encadrant_univ)
+        if year is not None:
+            report = report.filter(horodateur__startswith=year)
 
         rapport_Serializer = ReadRapportSerializer(report, many=True)
         return JsonResponse(rapport_Serializer.data, safe=False)
