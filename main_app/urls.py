@@ -7,6 +7,10 @@ urlpatterns = [
 
     #User
     path('user/<int:pk>',views.UserDetail.as_view()),
+    path('user',views.UserList.as_view()),
+    path('user/',views.UserList.as_view()),
+    path('user/usrname',views.UserbyUsername),
+    path('user/admin',views.AdminUsers),
     #professeurs
     path('professeurs/',views.ProfesseurList.as_view()),
     path('professeurs',views.ProfesseurList.as_view()),

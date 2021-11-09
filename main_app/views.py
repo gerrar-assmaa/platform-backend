@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.query import QuerySet
 from django.http.response import JsonResponse
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser 
 from rest_framework import generics
@@ -14,6 +15,36 @@ from main_app.serializers import MotCleSerializer, ProfesseurSerializer, Etudian
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+@api_view(['GET'])
+def UserbyUsername(request):
+    # GET list of reports, POST a new report, DELETE all reports
+    if request.method == 'GET':
+        Users = User.objects.all()
+        
+        usrname = request.GET.get('usrname', None)
+        user = None
+        if usrname is not None:
+          try:
+            user = Users.get(username=usrname)
+          except ObjectDoesNotExist:
+            user = None
+            
+        user_Serializer = UserSerializer(user, many=False)
+        return JsonResponse(user_Serializer.data, safe=False)
+
+@api_view(['GET'])
+def AdminUsers(request):
+    # GET list of reports, POST a new report, DELETE all reports
+    if request.method == 'GET':
+        adminUsers = User.objects.all()
+        adminUsers = adminUsers.filter(groups=1)
+            
+        admin_Serializer = UserSerializer(adminUsers, many=True)
+        return JsonResponse(admin_Serializer.data, safe=False)
 
 #professeur=====================================================================
 class ProfesseurList(generics.ListCreateAPIView):
@@ -116,7 +147,7 @@ def EtudiantListFiltered(request):
         if promotion is not None and promotion!="Tout":
             promotions=[]
             for i in range(3):
-                val = int(promotion)-i
+                val = int(promotion)+i
                 promotions.append(val)
             print(promotions)    
             etudiants = etudiants.filter(promotion__in=promotions)    
