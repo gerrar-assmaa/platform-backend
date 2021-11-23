@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'signIn_Up',
     #'gdstorage', #added for drive storage 
     'django_rest_passwordreset',
-    'debug_toolbar',
+    #'debug_toolbar',
 ]
 
 REST_FRAMEWORK = {
@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     ##for debugging
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     ####
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
